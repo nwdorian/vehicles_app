@@ -1,17 +1,6 @@
-import { useEffect } from "react";
 import Vehicles from "./Vehicles";
-import { seedData } from "./VehiclesSeed";
 
-export default function VehiclesGrid() {
-  useEffect(() => {
-    const vehicleData = JSON.parse(localStorage.getItem("vehicles"));
-    if (vehicleData == null) {
-      localStorage.setItem("vehicles", JSON.stringify(seedData));
-    }
-  }, []);
-
-  const vehicles = JSON.parse(localStorage.getItem("vehicles"));
-
+export default function VehiclesGrid({ vehicles, onDelete, onEdit }) {
   return (
     <div>
       <h1>VEHICLES</h1>
@@ -23,12 +12,22 @@ export default function VehiclesGrid() {
             <th>Color</th>
             <th>Year</th>
             <th>For Sale</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {vehicles.map((vehicle, index) => (
-            <Vehicles key={index} vehicle={vehicle} />
-          ))}
+          {vehicles == null ? (
+            <h1>Loading...</h1>
+          ) : (
+            vehicles.map((vehicle) => (
+              <Vehicles
+                onDelete={onDelete}
+                onEdit={onEdit}
+                key={vehicle.model}
+                vehicle={vehicle}
+              />
+            ))
+          )}
         </tbody>
       </table>
     </div>
